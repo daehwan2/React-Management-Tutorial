@@ -51,7 +51,7 @@ function App(props) {
   const { classes } = props;
   return (
     <Paper className={classes.root}>
-      <Table lassName={classes.table}>
+      <Table className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell>번호</TableCell>
