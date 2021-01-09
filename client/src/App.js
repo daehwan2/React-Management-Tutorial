@@ -1,5 +1,5 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
 import Customer from './components/Customer';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -18,37 +18,25 @@ const styles = theme => ({
   table: {
     minWidth: 800
   }
-})
-
-
-const customers = [
-  {
-    'id': 1,
-    'image': 'https://placeimg.com/64/64/1',
-    'name': '홍길동',
-    'birthday': '980208',
-    'gender': '남자',
-    'job': '대학생'
-  },
-  {
-    'id': 2,
-    'image': 'https://placeimg.com/64/64/2',
-    'name': '김대환',
-    'birthday': '970308',
-    'gender': '남자',
-    'job': '대학생'
-  },
-  {
-    'id': 3,
-    'image': 'https://placeimg.com/64/64/3',
-    'name': '여현지',
-    'birthday': '980803',
-    'gender': '여자',
-    'job': '취준생'
+});
+class App extends React.Component {
+  state ={
+    customers: ""
   }
-]
-function App(props) {
-  const { classes } = props;
+  
+  componentDidMount(){
+    this.callApi()
+    .then(res=> this.setState({customers: res}))
+    .catch(err => console.log(err));
+  }
+
+  callApi = async ()=>{
+    const response = await fetch('api/customers');
+    const body = await response.json();
+    return body;
+  }
+  render(){
+  const { classes } = this.props;
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -63,12 +51,14 @@ function App(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {customers.map(c => { return (<Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />) })}
+          {this.state.customers ? 
+          this.state.customers.map(c => { return (<Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />) }):""}
         </TableBody>
 
       </Table>
     </Paper>
   );
+          }
 }
 
 export default withStyles(styles)(App);
